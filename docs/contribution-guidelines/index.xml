@@ -10,7 +10,7 @@
 &lt;p>Sign up or login to GitHub: &lt;a href="https://github.com">https://github.com&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>Fork HugeGraph repo from GitHub: &lt;a href="https://github.com/hugegraph/hugegraph/fork">https://github.com/apache/incubator-hugegraph/fork&lt;/a>&lt;/p>
+&lt;p>Fork HugeGraph repo from GitHub: &lt;a href="https://github.com/apache/hugegraph/fork">https://github.com/apache/incubator-hugegraph/fork&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>Clone code from fork repo to local: &lt;a href="https://github.com/$%7BGITHUB_USER_NAME%7D/hugegraph">https://github.com/${GITHUB_USER_NAME}/hugegraph&lt;/a>&lt;/p>
@@ -22,7 +22,7 @@
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> hugegraph
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># add upstream to synchronize the latest code&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git remote add hugegraph https://github.com/hugegraph/hugegraph
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git remote add hugegraph https://github.com/apache/hugegraph
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># set name and email to push code to github&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git config user.name &lt;span style="color:#4e9a06">&amp;#34;{full-name}&amp;#34;&lt;/span> &lt;span style="color:#8f5902;font-style:italic"># like &amp;#34;Jermy Li&amp;#34;&lt;/span>
@@ -31,7 +31,7 @@
 &lt;/ol>
 &lt;p>Optional: You can use &lt;a href="https://desktop.github.com/">GitHub desktop&lt;/a> to greatly simplify the commit and update process.&lt;/p>
 &lt;h2 id="2-create-an-issue-on-github">2. Create an Issue on GitHub&lt;/h2>
-&lt;p>If you encounter bugs or have any questions, please go to &lt;a href="https://github.com/apache/incubator-hugegraph/issues">GitHub Issues&lt;/a> to report them and feel free to &lt;a href="https://github.com/hugegraph/hugegraph/issues/new">create an issue&lt;/a>.&lt;/p>
+&lt;p>If you encounter bugs or have any questions, please go to &lt;a href="https://github.com/apache/incubator-hugegraph/issues">GitHub Issues&lt;/a> to report them and feel free to &lt;a href="https://github.com/apache/hugegraph/issues/new">create an issue&lt;/a>.&lt;/p>
 &lt;h2 id="3-make-changes-of-code-locally">3. Make changes of code locally&lt;/h2>
 &lt;h4 id="31-create-a-new-branch">3.1 Create a new branch&lt;/h4>
 &lt;p>Please don&amp;rsquo;t use master branch for development. We should create a new branch instead:&lt;/p>
@@ -44,16 +44,16 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="32-change-the-code">3.2 Change the code&lt;/h4>
 &lt;p>Assume that we need to modify some files like &amp;ldquo;HugeGraph.java&amp;rdquo; and &amp;ldquo;HugeFactory.java&amp;rdquo;:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># modify code to fix a bug&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>vim hugegraph-core/src/main/java/com/baidu/hugegraph/HugeGraph.java
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>vim hugegraph-core/src/main/java/com/baidu/hugegraph/HugeFactory.java
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>vim hugegraph-core/src/main/java/org/apache/hugegraph/HugeGraph.java
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>vim hugegraph-core/src/main/java/org/apache/hugegraph/HugeFactory.java
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># run test locally (optional)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mvn &lt;span style="color:#204a87">test&lt;/span> -Pcore-test,memory
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note: In order to be consistent with the code style easily, if you use &lt;a href="https://www.jetbrains.com/idea/">IDEA&lt;/a> as your IDE, you can directly &lt;a href="https://www.jetbrains.com/help/idea/configuring-code-style.html">import&lt;/a> our code style &lt;a href="./hugegraph-style.xml">configuration file&lt;/a>.&lt;/p>
 &lt;h4 id="33-commit-changes-to-git-repo">3.3 Commit changes to git repo&lt;/h4>
 &lt;p>After the code has been completed, we submit them to the local git repo:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># add files to local git index&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add hugegraph-core/src/main/java/com/baidu/hugegraph/HugeGraph.java
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add hugegraph-core/src/main/java/com/baidu/hugegraph/HugeFactory.java
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add hugegraph-core/src/main/java/org/apache/hugegraph/HugeGraph.java
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add hugegraph-core/src/main/java/org/apache/hugegraph/HugeFactory.java
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># commit to local git repo&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git commit
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Please edit the commit message after running &lt;code>git commit&lt;/code>, we can explain what and how to fix a bug or implement a feature, the following is an example:&lt;/p>
@@ -133,7 +133,7 @@
 &lt;/li>
 &lt;/ol></description></item><item><title>Docs: Validate Apache Release</title><link>/docs/contribution-guidelines/validate-release/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/docs/contribution-guidelines/validate-release/</guid><description>
 &lt;blockquote>
-&lt;p>TODO: enhance this doc soon&lt;/p>
+&lt;p>Note: this doc will be updated continuously.&lt;/p>
 &lt;/blockquote>
 &lt;h2 id="verification">Verification&lt;/h2>
 &lt;p>When the internal temporary release and packaging work is completed, other community developers (especially PMC) need to participate in the &lt;a href="https://cwiki.apache.org/confluence/display/INCUBATOR/Incubator+Release+Checklist">verification link&lt;/a>To ensure the &amp;ldquo;correctness + completeness&amp;rdquo; of someone&amp;rsquo;s published version, here requires &lt;strong>everyone&lt;/strong> to participate as much as possible, and then explain which items you have &lt;strong>checked&lt;/strong> in the subsequent &lt;strong>email reply&lt;/strong>. (The following are the core items)&lt;/p>
@@ -187,25 +187,25 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 3. Check the signature (make sure there is no Warning output, every source/binary file prompts Good Signature)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#Single file verification&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --verify xx.asc xxx-source.tar.gz
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --verify xx.asc xxx-binary.tar.gz &lt;span style="color:#8f5902;font-style:italic"># 注: 我们目前没有 binary 后缀&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#for loop traversal verification (recommended)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --verify xx.asc xxx-src.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --verify xx.asc xxx.tar.gz &lt;span style="color:#8f5902;font-style:italic"># Note: without the bin/binary suffix&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># One-click shell traversal verification (recommended)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">for&lt;/span> i in *.tar.gz&lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">do&lt;/span> &lt;span style="color:#204a87">echo&lt;/span> &lt;span style="color:#000">$i&lt;/span>&lt;span style="color:#000;font-weight:bold">;&lt;/span> gpg --verify &lt;span style="color:#000">$i&lt;/span>.asc &lt;span style="color:#000">$i&lt;/span> &lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">done&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>First confirm the overall integrity/consistency, and then confirm the specific content (&lt;strong>key&lt;/strong>)&lt;/p>
 &lt;h4 id="4-check-the-archive-contents">4. Check the archive contents&lt;/h4>
 &lt;p>Here it is divided into two aspects: source code package + binary package, The source code package is stricter, it can be said that the core part (Because it is longer,For a complete list refer to the official &lt;a href="https://cwiki.apache.org/confluence/display/INCUBATOR/Incubator+Release+Checklist">Wiki&lt;/a>)&lt;/p>
 &lt;p>First of all, we need to download the package from the apache official &lt;code>release-candidate&lt;/code> URL to the local (URL: &lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/">click to jump&lt;/a>)&lt;/p>
 &lt;h5 id="a-source-package">A. source package&lt;/h5>
-&lt;p>After decompressing &lt;code>xxx-hugegraph-source.tar.gz&lt;/code>, Do the following checks:&lt;/p>
+&lt;p>After decompressing &lt;code>*hugegraph*src.tar.gz&lt;/code>, Do the following checks:&lt;/p>
 &lt;ol>
 &lt;li>folders with &lt;code>incubating&lt;/code>, and no &lt;strong>empty&lt;/strong> files/folders&lt;/li>
-&lt;li>&lt;code>DISCLAIMER&lt;/code> file exists&lt;/li>
-&lt;li>&lt;code>LICENSE&lt;/code> + &lt;code>NOTICE&lt;/code> file exists and the content is normal&lt;/li>
-&lt;li>** does not exist ** any binaries&lt;/li>
-&lt;li>The source code files all contain the standard &lt;code>ASF License&lt;/code> header ((this can be done using a plugin))&lt;/li>
+&lt;li>&lt;code>LICENSE&lt;/code> + &lt;code>NOTICE&lt;/code> + &lt;code>DISCLAIM&lt;/code> file exists and the content is normal&lt;/li>
+&lt;li>&lt;strong>does not exist&lt;/strong> binaries (without LICENSE)&lt;/li>
+&lt;li>The source code files all contain the standard &lt;code>ASF License&lt;/code> header (this could be done with the Maven-MAT plugin)&lt;/li>
 &lt;li>Check whether the &lt;code>pom.xml&lt;/code> version number of each parent/child module is consistent (and meet expectations)&lt;/li>
 &lt;li>Check the first 3 to 5 commits, click to see if the modification is consistent with the source file&lt;/li>
-&lt;li>Finally, make sure the source code works/compiles correctly (then look at tests and specs)&lt;/li>
+&lt;li>Finally, make sure the source code works/compiles correctly&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># prefer to use/switch to java 11 for the following operations (compiling/running)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># java --version&lt;/span>
@@ -217,12 +217,43 @@
 &lt;ol>
 &lt;li>folders with &lt;code>incubating&lt;/code>&lt;/li>
 &lt;li>&lt;code>LICENSE&lt;/code> and &lt;code>NOTICE&lt;/code> file exists and the content is normal&lt;/li>
-&lt;li>Confirm that the signature of each file is normal through the gpg command&lt;/li>
+&lt;li>start server&lt;/li>
 &lt;/ol>
-&lt;p>&lt;strong>Note:&lt;/strong> If a third-party dependency is introduced in the binary package, you need to update the LICENSE and add the third-party dependent LICENSE; if the third-party dependent LICENSE is Apache 2.0, and the corresponding project contains NOTICE, you also need to update Our NOTICE file&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># hugegraph-server&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>bin/start-hugegraph.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># hugegraph-loader&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>bin/hugegraph-loader.sh -f path -g graph -s schema
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># hugegraph-hubble&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>bin/start-hubble.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># hugegraph-computer&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>bin/start-computer.sh -d &lt;span style="color:#204a87">local&lt;/span> -r master
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>more reference official website: https://hugegraph.apache.org/cn/docs/quickstart
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Note:&lt;/strong> If a third-party dependency is introduced in the binary package, you need to update the LICENSE and add the third-party dependent LICENSE; if the third-party dependent LICENSE is Apache 2.0, and the corresponding project contains NOTICE, you also need to update Our NOTICE file&lt;/p>
 &lt;h4 id="5-check-the-official-website-and-github-and-other-pages">5. Check the official website and GitHub and other pages&lt;/h4>
 &lt;ol>
 &lt;li>Make sure that the official website at least meets &lt;a href="https://whimsy.apache.org/pods/project/hugegraph">apache website check&lt;/a>, and no circular links etc.&lt;/li>
-&lt;li>Update &lt;strong>download link&lt;/strong> and version update instructions&lt;/li>
+&lt;li>Update &lt;strong>download link&lt;/strong> and release notes updated&lt;/li>
 &lt;li>&amp;hellip;&lt;/li>
-&lt;/ol></description></item></channel></rss>
+&lt;/ol>
+&lt;h2 id="mail-template">Mail Template&lt;/h2>
+&lt;p>After the check &amp;amp; test, you should reply the mail with the following content: (normal devs &amp;amp; PMC)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-markdown" data-lang="markdown">&lt;span style="display:flex;">&lt;span>+1 (non-binding)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>I checked:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">1.&lt;/span> All download links are valid
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">2.&lt;/span> Checksum and signature are OK
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">3.&lt;/span> LICENSE and NOTICE are exist
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">4.&lt;/span> Build successfully on macOS(Big Sur)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">5.&lt;/span> ....
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>and the PMC members should reply with &lt;code>binding&lt;/code>, it&amp;rsquo;s important for summary the valid votes:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-markdown" data-lang="markdown">&lt;span style="display:flex;">&lt;span>+1 (binding)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>I checked:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">1.&lt;/span> All download links are valid
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">2.&lt;/span> Checksum and signature are OK
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">3.&lt;/span> LICENSE and NOTICE are exist
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">4.&lt;/span> Build successfully on macOS(Big Sur)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">5.&lt;/span> ....
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>

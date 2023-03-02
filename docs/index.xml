@@ -187,6 +187,7 @@ raft.apply_batch=1
 raft.rpc_threads=80
 raft.rpc_connect_timeout=5000
 raft.rpc_timeout=60000
+# if use &amp;#39;ikanalyzer&amp;#39;, need download jar from &amp;#39;https://github.com/apache/hugegraph-doc/raw/ik_binary/dist/server/ikanalyzer-2012_u6.jar&amp;#39; to lib directory
 search.text_analyzer=jieba
 search.text_analyzer_mode=INDEX
 # rocksdb backend config
@@ -1331,47 +1332,70 @@ serializer=binary
 &lt;li>社区聚类算法性能 Neo4j &amp;gt; HugeGraph &amp;gt; Titan&lt;/li>
 &lt;/ul></description></item><item><title>Docs: HugeGraph-Server Quick Start</title><link>/docs/quickstart/hugegraph-server/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/docs/quickstart/hugegraph-server/</guid><description>
 &lt;h3 id="1-hugegraph-server-overview">1 HugeGraph-Server Overview&lt;/h3>
-&lt;p>HugeGraph-Server is the core part of the HugeGraph Project, contains submodules such as Core、Backend、API.&lt;/p>
+&lt;p>&lt;code>HugeGraph-Server&lt;/code> is the core part of the HugeGraph Project, contains submodules such as Core、Backend、API.&lt;/p>
 &lt;p>The Core Module is an implementation of the Tinkerpop interface; The Backend module is used to save the graph data to the data store, currently supported backends include：Memory、Cassandra、ScyllaDB、RocksDB; The API Module provides HTTP Server, which converts Client&amp;rsquo;s HTTP request into a call to Core Module.&lt;/p>
 &lt;blockquote>
 &lt;p>There will be two spellings HugeGraph-Server and HugeGraphServer in the document, and other modules are similar. There is no big difference in the meaning of these two ways of writing, which can be distinguished as follows: &lt;code>HugeGraph-Server&lt;/code> represents the code of server-related components, &lt;code>HugeGraphServer&lt;/code> represents the service process.&lt;/p>
 &lt;/blockquote>
-&lt;h3 id="2-dependency">2 Dependency&lt;/h3>
+&lt;h3 id="2-dependency-for-buildingrunning">2 Dependency for Building/Running&lt;/h3>
 &lt;h4 id="21-install-java11-jdk-11">2.1 Install Java11 (JDK 11)&lt;/h4>
-&lt;p>Consider use Java 11 to run &lt;code>HugeGraph-Server&lt;/code>(also compatible with Java 8), and configure by yourself.&lt;/p>
+&lt;p>Consider use Java 11 to run &lt;code>HugeGraph-Server&lt;/code>(also compatible with Java 8 now), and configure by yourself.&lt;/p>
 &lt;p>&lt;strong>Be sure to execute the &lt;code>java -version&lt;/code> command to check the jdk version before reading&lt;/strong>&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>java -version
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="22-install-gcc-430glibcxx_3410-or-update-version-optional">2.2 Install GCC-4.3.0(GLIBCXX_3.4.10) or update version (optional)&lt;/h4>
-&lt;p>If you are using the RocksDB backend, be sure to execute the &lt;code>gcc --version&lt;/code> command to check the gcc version; if you are using other backends, this is not required.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>gcc --version
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="3-deploy">3 Deploy&lt;/h3>
+&lt;h4 id="22-install-gcc-43glibcxx_3410-or-higher-version-optional">2.2 Install GCC-4.3(GLIBCXX_3.4.10) or higher version (optional)&lt;/h4>
+&lt;p>If you are using the &lt;code>RocksDB&lt;/code> backend, be sure to execute the &lt;code>gcc --version&lt;/code> command to check its version; Not required if you are using other backends.&lt;/p>
+&lt;h3 id="3-deploy">3 Deploy&lt;/h3>
 &lt;p>There are three ways to deploy HugeGraph-Server components:&lt;/p>
 &lt;ul>
 &lt;li>Method 1: One-click deployment&lt;/li>
-&lt;li>Method 2: Download the tarball&lt;/li>
+&lt;li>Method 2: Download the binary tarball (most recommended)&lt;/li>
 &lt;li>Method 3: Source code compilation&lt;/li>
+&lt;li>Method 4: Use Docker container (BETA)&lt;/li>
 &lt;/ul>
 &lt;h4 id="31-one-click-deployment">3.1 One-click deployment&lt;/h4>
-&lt;p>HugeGraph-Tools provides a command-line tool for one-click deployment, users can use this tool to quickly download、decompress、configure and start HugeGraphServer and HugeGraphStudio with one click.
-of course, you still have to download the tarball of HugeGraph-Tools first.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>wget https://github.com/hugegraph/hugegraph-tools/releases/download/v&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>/hugegraph-tools-&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>.tar.gz
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar -zxvf hugegraph-tools-&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>.tar.gz
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> hugegraph-tools-&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>
+&lt;p>&lt;code>HugeGraph-Tools&lt;/code> provides a command-line tool for one-click deployment, users can use this tool to quickly download、decompress、configure and start &lt;code>HugeGraphServer&lt;/code> and &lt;code>HugeGraph-Hubble&lt;/code> with one click.&lt;/p>
+&lt;p>Of course, you should download the tarball of &lt;code>HugeGraph-Toolchain&lt;/code> first.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># download toolchain binary package, it includes loader + tool + hubble&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># please check the latest version (e.g. here is 1.0.0)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>wget https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar zxf *hugegraph-*.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># enter the tool&amp;#39;s package&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> *hugegraph*/*tool*
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
-&lt;p>note：${version} is the version, The latest version can refer to &lt;a href="/docs/download/download">Download Page&lt;/a>, Or click the link to download directly from the Download page&lt;/p>
+&lt;p>note：${version} is the version, The latest version can refer to &lt;a href="/docs/download/download">Download Page&lt;/a>, or click the link to download directly from the Download page&lt;/p>
 &lt;/blockquote>
 &lt;p>The general entry script for HugeGraph-Tools is &lt;code>bin/hugegraph&lt;/code>, Users can use the &lt;code>help&lt;/code> command to view its usage, here only the commands for one-click deployment are introduced.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>bin/hugegraph deploy -v &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>hugegraph-version&lt;span style="color:#ce5c00;font-weight:bold">}&lt;/span> -p &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>install-path&lt;span style="color:#ce5c00;font-weight:bold">}&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>-u &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>download-path-prefix&lt;span style="color:#ce5c00;font-weight:bold">}]&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>{hugegraph-version}&lt;/code> indicates the version of HugeGraphServer and HugeGraphStudio to be deployed, users can view the &lt;code>conf/version-mapping.yaml&lt;/code> file for version information, &lt;code>{install-path}&lt;/code> specify the installation directory of HugeGraphServer and HugeGraphStudio, &lt;code>{download-path-prefix}&lt;/code> optional, specify the download address of HugeGraphServer and HugeGraphStudio tarball, use default download URL if not provided, for example, to start HugeGraph-Server and HugeGraphStudio version 0.6, write the above command as &lt;code>bin/hugegraph deploy -v 0.6 -p services&lt;/code>.&lt;/p>
-&lt;h4 id="32-download-the-tar-tarball">3.2 Download the tar tarball&lt;/h4>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>wget https://github.com/hugegraph/hugegraph/releases/download/v&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>/hugegraph-&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>.tar.gz
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar -zxvf hugegraph-&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>.tar.gz
+&lt;h4 id="32-download-the-binary-tar-tarball">3.2 Download the binary tar tarball&lt;/h4>
+&lt;p>You could download the binary tarball from the download page of ASF site like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># use the latest version, here is 1.0.0 for example&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>wget https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar zxf *hugegraph*.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># (Optional) verify the integrity with SHA512 (recommended)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>shasum -a &lt;span style="color:#0000cf;font-weight:bold">512&lt;/span> apache-hugegraph-incubating-1.0.0.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>curl https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz.sha512
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="33-source-code-compilation">3.3 Source code compilation&lt;/h4>
-&lt;p>Download HugeGraph source code&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git clone https://github.com/hugegraph/hugegraph.git
+&lt;p>Please ensure that the wget command is installed before compiling the source code&lt;/p>
+&lt;p>We could get HugeGraph &lt;strong>source code&lt;/strong> by 2 ways: (So as the other HugeGraph repos/modules)&lt;/p>
+&lt;ul>
+&lt;li>download the stable/release version from the ASF site&lt;/li>
+&lt;li>clone the unstable/latest version by GitBox(ASF) or GitHub&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># Way 1. download release package from the ASF site&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>wget https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-src-1.0.0.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar zxf *hugegraph*.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># (Optional) verify the integrity with SHA512 (recommended)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>shasum -a &lt;span style="color:#0000cf;font-weight:bold">512&lt;/span> apache-hugegraph-incubating-src-1.0.0.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>curl https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz.sha512
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># Way2 : clone the latest code by git way (e.g GitHub)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git clone https://github.com/apache/hugegraph.git
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Compile and generate tarball&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> hugegraph
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mvn package -DskipTests
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> *hugegraph
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mvn package -DskipTests -ntp
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The execution log is as follows:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>......
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>INFO&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span> Reactor Summary:
@@ -1391,7 +1415,7 @@ of course, you still have to download the tarball of HugeGraph-Tools first.&lt;/
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>INFO&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span> BUILD SUCCESS
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>INFO&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span> ------------------------------------------------------------------------
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>......
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>After successful execution, hugegraph-*.tar.gz files will be generated in the hugegraph directory, which is the tarball generated by compilation.&lt;/p>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>After successful execution, &lt;code>*hugegraph-*.tar.gz&lt;/code> files will be generated in the hugegraph directory, which is the tarball generated by compilation.&lt;/p>
 &lt;h3 id="4-config">4 Config&lt;/h3>
 &lt;p>If you need to quickly start HugeGraph just for testing, then you only need to modify a few configuration items (see next section).
 for detailed configuration introduction, please refer to &lt;a href="/docs/config/config-guide">configuration document&lt;/a> and &lt;a href="/docs/config/config-option">introduction to configuration items&lt;/a>&lt;/p>
@@ -2682,7 +2706,7 @@ HugeGraph supports multi-user parallel operations. Users can enter Gremlin query
 &lt;tr>
 &lt;td>search.text_analyzer&lt;/td>
 &lt;td>ikanalyzer&lt;/td>
-&lt;td>Choose a text analyzer for searching the vertex/edge properties, available type are [word, ansj, hanlp, smartcn, jieba, jcseg, mmseg4j, ikanalyzer].&lt;/td>
+&lt;td>Choose a text analyzer for searching the vertex/edge properties, available type are [word, ansj, hanlp, smartcn, jieba, jcseg, mmseg4j, ikanalyzer]. if use &amp;lsquo;ikanalyzer&amp;rsquo;, need download jar from &amp;lsquo;&lt;a href="https://github.com/apache/hugegraph-doc/raw/ik_binary/dist/server/ikanalyzer-2012_u6.jar'">https://github.com/apache/hugegraph-doc/raw/ik_binary/dist/server/ikanalyzer-2012_u6.jar'&lt;/a> to lib directory&lt;/td>
 &lt;/tr>
 &lt;tr>
 &lt;td>search.text_analyzer_mode&lt;/td>
@@ -3617,11 +3641,8 @@ HugeGraph目前采用EdgeCut的分区方案。&lt;/p>
 &lt;blockquote>
 &lt;p>TinkerPop API允许打开事务，请求完成时会自动关闭(Gremlin Server强制关闭)&lt;/p>
 &lt;/blockquote></description></item><item><title>Docs: Download HugeGraph</title><link>/docs/download/download/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/docs/download/download/</guid><description>
-&lt;blockquote>
-&lt;p>TODO: update 1.0.0 download link with the CN doc&lt;/p>
-&lt;/blockquote>
 &lt;h3 id="latest-version">Latest version&lt;/h3>
-&lt;p>The latest HugeGraph: &lt;strong>1.0.0&lt;/strong>, released on &lt;em>2022-12-31&lt;/em>.&lt;/p>
+&lt;p>The latest HugeGraph: &lt;strong>1.0.0&lt;/strong>, released on &lt;em>2023-02-22&lt;/em>(&lt;a href="/docs/quickstart/hugegraph-server/">how to build from source&lt;/a>).&lt;/p>
 &lt;table>
 &lt;thead>
 &lt;tr>
@@ -3634,12 +3655,12 @@ HugeGraph目前采用EdgeCut的分区方案。&lt;/p>
 &lt;tr>
 &lt;td>HugeGraph-Server&lt;/td>
 &lt;td>The main program of HugeGraph&lt;/td>
-&lt;td>&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz">1.0.0&lt;/a>&lt;/td>
+&lt;td>&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz">1.0.0&lt;/a>(&lt;a href="https://dlcdn.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz">alternate&lt;/a>)&lt;/td>
 &lt;/tr>
 &lt;tr>
 &lt;td>HugeGraph-Toolchain&lt;/td>
 &lt;td>A collection of tools for graph data import/export/backup, web visualization, etc.&lt;/td>
-&lt;td>&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz">1.0.0&lt;/a>&lt;/td>
+&lt;td>&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz">1.0.0&lt;/a>(&lt;a href="https://dlcdn.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz">alternate&lt;/a>)&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
@@ -3658,10 +3679,10 @@ HugeGraph目前采用EdgeCut的分区方案。&lt;/p>
 &lt;tbody>
 &lt;tr>
 &lt;td>1.0.0&lt;/td>
-&lt;td>2022-12-31&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz">Binary&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz">Binary&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0.tar.gz">Binary&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>2023-02-22&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz">Binary&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz">Binary&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0.tar.gz">Binary&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
 &lt;td>&lt;a href="/docs/changelog/hugegraph-1.0.0-release-notes/">Release-Notes&lt;/a>&lt;/td>
 &lt;/tr>
 &lt;/tbody>
@@ -3683,11 +3704,11 @@ HugeGraph目前采用EdgeCut的分区方案。&lt;/p>
 &lt;tbody>
 &lt;tr>
 &lt;td>1.0.0&lt;/td>
-&lt;td>2022-12-31&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
-&lt;td>[&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-commons-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-commons-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-commons-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>2023-02-22&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-computer-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
+&lt;td>[&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-commons-incubating-1.0.0-src.tar.gz">Source&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-commons-incubating-1.0.0-src.tar.gz.asc">Sign&lt;/a>] [&lt;a href="https://downloads.apache.org/incubator/hugegraph/1.0.0/apache-hugegraph-commons-incubating-1.0.0-src.tar.gz.sha512">SHA512&lt;/a>]&lt;/td>
 &lt;td>&lt;a href="/docs/changelog/hugegraph-1.0.0-release-notes/">Release-Notes&lt;/a>&lt;/td>
 &lt;/tr>
 &lt;/tbody>
@@ -3786,8 +3807,7 @@ HugeGraph目前采用EdgeCut的分区方案。&lt;/p>
 &lt;h3 id="1-概述">1 概述&lt;/h3>
 &lt;p>本示例将&lt;a href="http://s3.thinkaurelius.com/docs/titan/1.0.0/getting-started.html">TitanDB Getting Started&lt;/a> 为模板来演示HugeGraph的使用方法。通过对比HugeGraph和TitanDB，了解HugeGraph和TitanDB的差异。&lt;/p>
 &lt;h4 id="11-hugegraph与titandb的异同">1.1 HugeGraph与TitanDB的异同&lt;/h4>
-&lt;p>HugeGraph和TitanDB都是基于&lt;a href="https://tinkerpop.apache.org">Apache TinkerPop3&lt;/a>框架的图数据库，均支持[Gremlin](&lt;a href="https://tinkerpop.apache">https://tinkerpop.apache&lt;/a>
-.org/gremlin.html)图查询语言，在使用方法和接口方面具有很多相似的地方。然而HugeGraph是全新设计开发的，其代码结构清晰，功能较为丰富，接口更为友好等特点。&lt;/p>
+&lt;p>HugeGraph和TitanDB都是基于&lt;a href="https://tinkerpop.apache.org">Apache TinkerPop3&lt;/a>框架的图数据库，均支持&lt;a href="https://tinkerpop.apache.org/gremlin.html">Gremlin&lt;/a>图查询语言，在使用方法和接口方面具有很多相似的地方。然而HugeGraph是全新设计开发的，其代码结构清晰，功能较为丰富，接口更为友好等特点。&lt;/p>
 &lt;p>HugeGraph相对于TitanDB而言，其主要特点如下：&lt;/p>
 &lt;ul>
 &lt;li>HugeGraph目前有HugeGraph-API、HugeGraph-Client、HugeGraph-Loader、HugeGraph-Studio、HugeGraph-Spark等完善的工具组件，可以完成系统集成、数据载入、图可视化查询、Spark 连接等功能；&lt;/li>
@@ -6815,6 +6835,7 @@ auth.user_tokens=[hugegraph1:token-value-1, hugegraph2:token-value-2]
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>wget https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar zxf *hugegraph*.tar.gz
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="22-clone-source-code-to-compile-and-install">2.2 Clone source code to compile and install&lt;/h4>
+&lt;p>Please ensure that the wget command is installed before compiling the source code&lt;/p>
 &lt;p>Download the latest version of the HugeGraph-Tools source package:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 1. get from github&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git clone https://github.com/apache/hugegraph-toolchain.git
@@ -7548,7 +7569,7 @@ Implement a class inherited from &lt;code>Formatter&lt;/code> in the directory, 
 &lt;h2 id="verification">Verification&lt;/h2>
 &lt;p>When the internal temporary release and packaging work is completed, other community developers (especially PMC) need to participate in the &lt;a href="https://cwiki.apache.org/confluence/display/INCUBATOR/Incubator+Release+Checklist">verification link&lt;/a>To ensure the &amp;ldquo;correctness + completeness&amp;rdquo; of someone&amp;rsquo;s published version, here requires &lt;strong>everyone&lt;/strong> to participate as much as possible, and then explain which items you have &lt;strong>checked&lt;/strong> in the subsequent &lt;strong>email reply&lt;/strong>. (The following are the core items)&lt;/p>
 &lt;h4 id="1-prepare">1. prepare&lt;/h4>
-&lt;p>If there is no svn or gpg environment locally, it is recommended to install it first (windows recommend using WSL2 environment, or at least &lt;code>git-bash&lt;/code>)&lt;/p>
+&lt;p>If there is no svn or gpg or wget environment locally, it is recommended to install it first (windows recommend using WSL2 environment, or at least &lt;code>git-bash&lt;/code>), also make sure to install java (recommended 11) and maven software&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 1. install svn&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># ubuntu/debian&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo apt install subversion -y
@@ -7565,7 +7586,13 @@ Implement a class inherited from &lt;code>Formatter&lt;/code> in the directory, 
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># To verify that the installation was successful, execute the following command:&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --version
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 3. Download the hugegraph-svn directory (version number, pay attention to fill in the verification version, here we take 1.0.0 as an example)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 3. install wget (we will enhance it later, like use `curl`)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># ubuntu/debian&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo apt-get install wget -y
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># MacOS&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>brew install wget
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 4. Download the hugegraph-svn directory (version number, pay attention to fill in the verification version, here we take 1.0.0 as an example)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>svn co https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># (Note) If svn downloads a file very slowly, you can consider wget to download a single file, as follows (or consider using a proxy)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>wget https://dist.apache.org/repos/dist/dev/incubator/hugegraph/1.0.0/apache-hugegraph-toolchain-incubating-1.0.0.tar.gz
@@ -7581,18 +7608,25 @@ Implement a class inherited from &lt;code>Formatter&lt;/code> in the directory, 
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># After importing, you can see the following output, which means that 3 user public keys have been imported&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: /home/ubuntu/.gnupg/trustdb.gpg: trustdb created
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: key B78B058CC255F6DC: public key &lt;span style="color:#4e9a06">&amp;#34;Imba Jin (apache mail) &amp;lt;jin@apache.org&amp;gt;&amp;#34;&lt;/span> imported
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: key BA7E78F8A81A885E: public key &lt;span style="color:#4e9a06">&amp;#34;imbajin (apache mail) &amp;lt;jin@apache.org&amp;gt;&amp;#34;&lt;/span> imported
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: key 818108E7924549CC: public key &lt;span style="color:#4e9a06">&amp;#34;vaughn &amp;lt;vaughn@apache.org&amp;gt;&amp;#34;&lt;/span> imported
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: key 28DCAED849C4180E: public key &lt;span style="color:#4e9a06">&amp;#34;coderzc (CODE SIGNING KEY) &amp;lt;zhaocong@apache.org&amp;gt;&amp;#34;&lt;/span> imported
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: Total number processed: &lt;span style="color:#0000cf;font-weight:bold">3&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg: imported: &lt;span style="color:#0000cf;font-weight:bold">3&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 2. Trust release users (here you need to trust 3 users, perform the same operation for Imba Jin, vaughn, coderzc in turn)&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --edit-key Imba Jin &lt;span style="color:#8f5902;font-style:italic"># Take the first one as an example, enter the interactive mode&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 2. Trust release users (trust n username mentioned in voting mail, if more than one user, just repeat the steps in turn or use the script below)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg --edit-key &lt;span style="color:#000">$USER&lt;/span> &lt;span style="color:#8f5902;font-style:italic"># input the username, enter the interactive mode&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>gpg&amp;gt; trust
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...output options..
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Your decision? &lt;span style="color:#0000cf;font-weight:bold">5&lt;/span> &lt;span style="color:#8f5902;font-style:italic">#select five&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Do you really want to &lt;span style="color:#204a87">set&lt;/span> this key to ultimate trust? &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>y/N&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span> y &lt;span style="color:#8f5902;font-style:italic">#slect y, then q quits trusting the next user&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Your decision? &lt;span style="color:#0000cf;font-weight:bold">5&lt;/span> &lt;span style="color:#8f5902;font-style:italic"># select 5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Do you really want to &lt;span style="color:#204a87">set&lt;/span> this key to ultimate trust? &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>y/N&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span> y &lt;span style="color:#8f5902;font-style:italic"># slect y, then q quits trusting the next user&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># (Optional) You could also use the command to trust one user in non-interactive mode:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">echo&lt;/span> -e &lt;span style="color:#4e9a06">&amp;#34;5\ny\n&amp;#34;&lt;/span> &lt;span style="color:#000;font-weight:bold">|&lt;/span> gpg --batch --command-fd &lt;span style="color:#0000cf;font-weight:bold">0&lt;/span> --edit-key &lt;span style="color:#000">$USER&lt;/span> trust
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># Or use the script to auto import all public gpg keys (be carefully):&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">for&lt;/span> key in &lt;span style="color:#204a87;font-weight:bold">$(&lt;/span>gpg --no-tty --list-keys --with-colons &lt;span style="color:#000;font-weight:bold">|&lt;/span> awk -F: &lt;span style="color:#4e9a06">&amp;#39;/^pub/ {print $5}&amp;#39;&lt;/span>&lt;span style="color:#204a87;font-weight:bold">)&lt;/span>&lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87">echo&lt;/span> -e &lt;span style="color:#4e9a06">&amp;#34;5\ny\n&amp;#34;&lt;/span> &lt;span style="color:#000;font-weight:bold">|&lt;/span> gpg --batch --command-fd &lt;span style="color:#0000cf;font-weight:bold">0&lt;/span> --edit-key &lt;span style="color:#4e9a06">&amp;#34;&lt;/span>&lt;span style="color:#000">$key&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;&lt;/span> trust
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">done&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># 3. Check the signature (make sure there is no Warning output, every source/binary file prompts Good Signature)&lt;/span>
@@ -7612,9 +7646,8 @@ Implement a class inherited from &lt;code>Formatter&lt;/code> in the directory, 
 &lt;li>folders with &lt;code>incubating&lt;/code>, and no &lt;strong>empty&lt;/strong> files/folders&lt;/li>
 &lt;li>&lt;code>LICENSE&lt;/code> + &lt;code>NOTICE&lt;/code> + &lt;code>DISCLAIM&lt;/code> file exists and the content is normal&lt;/li>
 &lt;li>&lt;strong>does not exist&lt;/strong> binaries (without LICENSE)&lt;/li>
-&lt;li>The source code files all contain the standard &lt;code>ASF License&lt;/code> header (this could be done with the Maven-MAT plugin)&lt;/li>
+&lt;li>The source code files all contain the standard &lt;code>ASF License&lt;/code> header (this could be done with the &lt;code>Maven-MAT&lt;/code> plugin)&lt;/li>
 &lt;li>Check whether the &lt;code>pom.xml&lt;/code> version number of each parent/child module is consistent (and meet expectations)&lt;/li>
-&lt;li>Check the first 3 to 5 commits, click to see if the modification is consistent with the source file&lt;/li>
 &lt;li>Finally, make sure the source code works/compiles correctly&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># prefer to use/switch to java 11 for the following operations (compiling/running)&lt;/span>
@@ -10828,7 +10861,7 @@ batch_size_fail_threshold_in_kb: 1000
 &lt;li>page: 页号&lt;/li>
 &lt;/ul>
 &lt;p>以上参数都是可选的，如果提供page参数，必须提供limit参数，不允许带其他参数。&lt;code>label, properties&lt;/code>和&lt;code>limit&lt;/code>可以任意组合。&lt;/p>
-&lt;p>属性键值对由JSON格式的属性名称和属性值组成，允许多个属性键值对作为查询条件，属性值支持精确匹配和范围匹配，精确匹配时形如&lt;code>properties={&amp;quot;age&amp;quot;:29}&lt;/code>，范围匹配时形如&lt;code>properties={&amp;quot;age&amp;quot;:&amp;quot;P.gt(29)&amp;quot;}&lt;/code>,范围匹配支持的表达式如下：&lt;/p>
+&lt;p>属性键值对由JSON格式的属性名称和属性值组成，允许多个属性键值对作为查询条件，属性值支持精确匹配、范围匹配和模糊匹配，精确匹配时形如&lt;code>properties={&amp;quot;age&amp;quot;:29}&lt;/code>，范围匹配时形如&lt;code>properties={&amp;quot;age&amp;quot;:&amp;quot;P.gt(29)&amp;quot;}&lt;/code>，模糊匹配时形如&lt;code>properties={&amp;quot;city&amp;quot;: &amp;quot;P.textcontains(&amp;quot;ChengDu China&amp;quot;)}，&lt;/code>范围匹配支持的表达式如下：&lt;/p>
 &lt;table>
 &lt;thead>
 &lt;tr>
@@ -11368,7 +11401,7 @@ batch_size_fail_threshold_in_kb: 1000
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>属性键值对由JSON格式的属性名称和属性值组成，允许多个属性键值对作为查询条件，属性值支持精确匹配和范围匹配，精确匹配时形如&lt;code>properties={&amp;quot;weight&amp;quot;:0.8}&lt;/code>，范围匹配时形如&lt;code>properties={&amp;quot;age&amp;quot;:&amp;quot;P.gt(0.8)&amp;quot;}&lt;/code>,范围匹配支持的表达式如下：&lt;/p>
+&lt;p>属性键值对由JSON格式的属性名称和属性值组成，允许多个属性键值对作为查询条件，属性值支持精确匹配、范围匹配和模糊匹配，精确匹配时形如&lt;code>properties={&amp;quot;weight&amp;quot;:0.8}&lt;/code>，范围匹配时形如&lt;code>properties={&amp;quot;age&amp;quot;:&amp;quot;P.gt(0.8)&amp;quot;}&lt;/code>，模糊匹配时形如&lt;code>properties={&amp;quot;city&amp;quot;: &amp;quot;P.textcontains(&amp;quot;ChengDu China&amp;quot;)}&lt;/code>，范围匹配支持的表达式如下：&lt;/p>
 &lt;table>
 &lt;thead>
 &lt;tr>

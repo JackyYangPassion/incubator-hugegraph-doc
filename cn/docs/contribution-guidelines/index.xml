@@ -6,6 +6,7 @@
 &lt;p>The following is a contribution guide for HugeGraph:&lt;/p>
 &lt;img width="884" alt="image" src="https://user-images.githubusercontent.com/9625821/159643158-8bf72c0a-93c3-4a58-8912-7b2ab20ced1d.png">
 &lt;h2 id="1-preparation">1. Preparation&lt;/h2>
+&lt;p>&lt;strong>建议&lt;/strong>: 使用 &lt;a href="https://desktop.github.com/">GitHub desktop&lt;/a> 可以大幅简化和改善你提交 PR/Commit 的过程, 特别适合新人&lt;/p>
 &lt;p>We can contribute by reporting issues, submitting code patches or any other feedback.&lt;/p>
 &lt;p>Before submitting the code, we need to do some preparation:&lt;/p>
 &lt;ol>
@@ -32,7 +33,6 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git config user.email &lt;span style="color:#4e9a06">&amp;#34;{email-address-of-github}&amp;#34;&lt;/span> &lt;span style="color:#8f5902;font-style:italic"># like &amp;#34;jermy@apache.org&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
 &lt;/ol>
-&lt;p>Optional: You can use &lt;a href="https://desktop.github.com/">GitHub desktop&lt;/a> to greatly simplify the commit and update process.&lt;/p>
 &lt;h2 id="2-create-an-issue-on-github">2. Create an Issue on GitHub&lt;/h2>
 &lt;p>If you encounter bugs or have any questions, please go to &lt;a href="https://github.com/apache/incubator-hugegraph/issues">GitHub Issues&lt;/a> to report them and feel free to &lt;a href="https://github.com/apache/hugegraph/issues/new">create an issue&lt;/a>.&lt;/p>
 &lt;h2 id="3-make-changes-of-code-locally">3. Make changes of code locally&lt;/h2>
@@ -52,6 +52,21 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># run test locally (optional)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mvn &lt;span style="color:#204a87">test&lt;/span> -Pcore-test,memory
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note: In order to be consistent with the code style easily, if you use &lt;a href="https://www.jetbrains.com/idea/">IDEA&lt;/a> as your IDE, you can directly &lt;a href="https://www.jetbrains.com/help/idea/configuring-code-style.html">import&lt;/a> our code style &lt;a href="./hugegraph-style.xml">configuration file&lt;/a>.&lt;/p>
+&lt;h5 id="321-添加第三方依赖">3.2.1 添加第三方依赖&lt;/h5>
+&lt;p>如果我们要在 &lt;code>HugeGraph&lt;/code> 项目中添加新的第三方依赖, 我们需要做下面的几件事情：&lt;/p>
+&lt;ol>
+&lt;li>找到第三方依赖的仓库，将依赖的 &lt;code>license&lt;/code> 文件放到 &lt;a href="https://github.com/apache/incubator-hugegraph/tree/master/hugegraph-dist/release-docs/licenses">./hugegraph-dist/release-docs/licenses/&lt;/a> 路径下。&lt;/li>
+&lt;li>在&lt;a href="https://github.com/apache/incubator-hugegraph/blob/master/hugegraph-dist/release-docs/LICENSE">./hugegraph-dist/release-docs/LICENSE&lt;/a> 中声明该依赖的 &lt;code>LICENSE&lt;/code> 信息。&lt;/li>
+&lt;li>找到仓库里的 NOTICE 文件，将其追加到 &lt;a href="https://github.com/apache/incubator-hugegraph/blob/master/hugegraph-dist/release-docs/NOTICE">./hugegraph-dist/release-docs/NOTICE&lt;/a> 文件后面（如果没有NOTICE文件则跳过这一步）。&lt;/li>
+&lt;li>本地执行&lt;a href="https://github.com/apache/incubator-hugegraph/blob/master/hugegraph-dist/scripts/dependency/regenerate_known_dependencies.sh">./hugegraph-dist/scripts/dependency/regenerate_known_dependencies.sh&lt;/a> 脚本来更新依赖列表&lt;a href="https://github.com/apache/incubator-hugegraph/blob/master/hugegraph-dist/scripts/dependency/known-dependencies.txt">known-dependencies.txt&lt;/a> (或者手动更新)。&lt;/li>
+&lt;/ol>
+&lt;p>&lt;strong>例如&lt;/strong>：在项目中引入了第三方新依赖 -&amp;gt; &lt;code>ant-1.9.1.jar&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>项目源码位于：https://github.com/apache/ant/tree/rel/1.9.1&lt;/li>
+&lt;li>LICENSE 文件：https://github.com/apache/ant/blob/rel/1.9.1/LICENSE&lt;/li>
+&lt;li>NOTICE 文件：https://github.com/apache/ant/blob/rel/1.9.1/NOTICE&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>ant-1.9.1.jar&lt;/code> 的 license 信息需要在 LICENSE 文件中指定，notice 信息需要在 NOTICE 文件中指定。 ant-1.9.1.jar 对应的详细 LICENSE 文件需要复制到我们的 licenses/ 目录下。最后更新 known-dependencies.txt 文件。&lt;/p>
 &lt;h4 id="33-commit-changes-to-git-repo">3.3 Commit changes to git repo&lt;/h4>
 &lt;p>After the code has been completed, we submit them to the local git repo:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># add files to local git index&lt;/span>
@@ -74,8 +89,6 @@
 &lt;img width="1280" alt="image" src="https://user-images.githubusercontent.com/9625821/163524204-7fe0e6bf-9c8b-4b1a-ac65-6a0ac423eb16.png">&lt;/p>
 &lt;h2 id="4-create-a-pull-request">4. Create a Pull Request&lt;/h2>
 &lt;p>Go to the web page of GitHub fork repo, there would be a chance to create a Pull Request after pushing to a new branch, just click button &amp;ldquo;Compare &amp;amp; pull request&amp;rdquo; to do it. Then edit the description for proposed changes, which can just be copied from the commit message.&lt;/p>
-&lt;p>Please sign the HugeGraph CLA when contributing code for the first time. You can sign the CLA by just posting a Pull Request Comment same as the below format:&lt;/p>
-&lt;p>&lt;code>I have read the CLA Document and I hereby sign the CLA&lt;/code>&lt;/p>
 &lt;p>Note: please make sure the email address you used to submit the code is bound to the GitHub account. For how to bind the email address, please refer to &lt;a href="https://github.com/settings/emails">https://github.com/settings/emails&lt;/a>:
 &lt;img width="1280" alt="image" src="https://user-images.githubusercontent.com/9625821/163522445-2a50a72a-dea2-434f-9868-3a0d40d0d037.png">&lt;/p>
 &lt;h2 id="5-code-review">5. Code review&lt;/h2>
@@ -113,7 +126,6 @@
 &lt;li>通过您的电子邮件账户发送邮件至 &lt;a href="mailto:dev-subscribe@hugegraph.apache.org">dev-subscribe@hugegraph.apache.org&lt;/a>，然后您将收到一封确认邮件。&lt;/li>
 &lt;li>回复确认邮件以确认您的订阅。然后，您将收到另一封确认邮件。&lt;/li>
 &lt;li>现在您已经成为该邮件列表的订阅者。如果您有更多问题，只需发送邮件到邮件列表，社区同学看到后会及时回复。&lt;/li>
-&lt;li>如果您想取消订阅邮件列表，只需发送邮件至 &lt;a href="mailto:dev-unsubscribe@hugegraph.apache.org">dev-unsubscribe@hugegraph.apache.org&lt;/a>，然后按照确认邮件中的步骤操作即可。&lt;/li>
 &lt;/ul>
 &lt;p>您可以随时订阅邮件列表。此外，您也可以直接浏览&lt;a href="https://lists.apache.org/list.html?dev@hugegraph.apache.org">历史邮件/所有邮件&lt;/a>（即使没有订阅列表）。&lt;/p>
 &lt;p>注意事项：&lt;/p>
@@ -130,7 +142,7 @@
 &lt;li>&lt;a href="https://lists.apache.org/list.html?dev@hugegraph.apache.org">https://lists.apache.org/list.html?dev@hugegraph.apache.org&lt;/a>&lt;/li>
 &lt;li>&lt;a href="http://apache.org/foundation/mailinglists.html#subscribing">http://apache.org/foundation/mailinglists.html#subscribing&lt;/a>&lt;/li>
 &lt;/ul>
-&lt;h1 id="退订邮件列表-">退订邮件列表 👋🏻&lt;/h1>
+&lt;h1 id="退订邮件列表">退订邮件列表&lt;/h1>
 &lt;p>如果您不再需要了解 HugeGraph 的最新动态，可以退订邮件列表。&lt;/p>
 &lt;p>退订邮件列表的步骤如下：&lt;/p>
 &lt;ol>
@@ -308,7 +320,7 @@
 &lt;ul>
 &lt;li>在 &lt;code>Use classpath of module&lt;/code> 中选择 &lt;code>hugegraph-dist&lt;/code>&lt;/li>
 &lt;li>将 &lt;code>Main class&lt;/code> 设置为 &lt;code>org.apache.hugegraph.cmd.InitStore&lt;/code>&lt;/li>
-&lt;li>设置运行参数为 &lt;code>conf/graphs/hugegraph.properties&lt;/code>，这里的路径是相对于工作路径的，需要将工作路径设置为 &lt;code>path-to-your-directory&lt;/code>&lt;/li>
+&lt;li>设置运行参数为 &lt;code>conf/rest-server.properties&lt;/code>，这里的路径是相对于工作路径的，需要将工作路径设置为 &lt;code>path-to-your-directory&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;p>配置完成后运行，如果运行成功，将会输出以下类似运行日志：&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000">2023&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">-&lt;/span>&lt;span style="color:#000">06&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">-&lt;/span>&lt;span style="color:#000">05&lt;/span> &lt;span style="color:#000">00&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span>&lt;span style="color:#000">43&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span>&lt;span style="color:#000">37&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>&lt;span style="color:#000">main&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>&lt;span style="color:#000">INFO&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span> &lt;span style="color:#000">o&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">.&lt;/span>&lt;span style="color:#c4a000">a&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">.&lt;/span>&lt;span style="color:#c4a000">h&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">.&lt;/span>&lt;span style="color:#c4a000">u&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">.&lt;/span>&lt;span style="color:#c4a000">ConfigUtil&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">-&lt;/span> &lt;span style="color:#000">Scanning&lt;/span> &lt;span style="color:#000">option&lt;/span> &lt;span style="color:#a40000">&amp;#39;&lt;/span>&lt;span style="color:#000">graphs&lt;/span>&lt;span style="color:#a40000">&amp;#39;&lt;/span> &lt;span style="color:#000">directory&lt;/span> &lt;span style="color:#a40000">&amp;#39;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">./&lt;/span>&lt;span style="color:#000">conf&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">/&lt;/span>&lt;span style="color:#000">graphs&lt;/span>&lt;span style="color:#a40000">&amp;#39;&lt;/span>
@@ -352,14 +364,15 @@
 &lt;li>设置 VM options 为 &lt;code>-Dlog4j.configurationFile=conf/log4j2.xml&lt;/code>&lt;/li>
 &lt;/ol>
 &lt;h3 id="可能遇到的问题">可能遇到的问题&lt;/h3>
-&lt;h4 id="java-package-sunmisc-does-not-exist">java: package sun.misc does not exist&lt;/h4>
+&lt;h4 id="1-java-package-sunmisc-does-not-exist">1. java: package sun.misc does not exist&lt;/h4>
 &lt;p>原因可能是在使用 Java 11 编译时触发了交叉编译，导致项目中使用的 &lt;code>sun.misc.Unsafe&lt;/code> 找不到符号。有两种解决方案可供选择：&lt;/p>
 &lt;ol>
 &lt;li>在 IntelliJ IDEA 的 &lt;code>Preferences/Settings&lt;/code> 中找到 &lt;code>Java Compiler&lt;/code> 面板，然后关闭 &lt;code>--release&lt;/code> 选项 (推荐)&lt;/li>
 &lt;li>或者将项目的 SDK 版本设置为 8&lt;/li>
 &lt;/ol>
-&lt;h4 id="log4j2-日志无法打印-l-等位置信息">Log4j2 日志无法打印 %l 等位置信息&lt;/h4>
+&lt;h4 id="2-log4j2-日志无法打印-l-等位置信息">2. Log4j2 日志无法打印 %l 等位置信息&lt;/h4>
 &lt;p>这是因为 Log4j2 中使用了 asynchronous loggers，可以参考&lt;a href="https://logging.apache.org/log4j/2.x/manual/layouts.html#LocationInformation">官方文档&lt;/a>进行配置&lt;/p>
+&lt;hr>
 &lt;h5 id="参考">参考&lt;/h5>
 &lt;ol>
 &lt;li>&lt;a href="/docs/quickstart/hugegraph-server/">HugeGraph-Server Quick Start&lt;/a>&lt;/li>

@@ -1,21 +1,33 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HugeGraph – GUIDES</title><link>/docs/guides/</link><description>Recent content in GUIDES on HugeGraph</description><generator>Hugo -- gohugo.io</generator><atom:link href="/docs/guides/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: HugeGraph Architecture Overview</title><link>/docs/guides/architectural/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/docs/guides/architectural/</guid><description>
 &lt;h3 id="1-overview">1 Overview&lt;/h3>
-&lt;p>As a general-purpose graph database product, HugeGraph needs to have the basic functions of graph data, as shown in the figure below. HugeGraph includes three levels of functions, namely storage layer, computing layer and user interface layer. HugeGraph supports two types of graph computing, OLTP and OLAP. OLTP implements the &lt;a href="https://tinkerpop.apache.org">Apache TinkerPop3&lt;/a> framework and supports the &lt;a href="https://tinkerpop.apache.org/gremlin.html">Gremlin&lt;/a> query language. OLAP computing is implemented based on SparkGraphX.&lt;/p>
-&lt;center>
-&lt;img src="/docs/images/design/architectural-overview.png" alt="image">
-&lt;/center>
-&lt;h3 id="2-components">2 components&lt;/h3>
-&lt;p>The main functions of HugeGraph are divided into components such as HugeCore, ApiServer, HugeGraph-Client, HugeGraph-Loader and HugeGraph-Studio. The communication relationship between each component is shown in the figure below.&lt;/p>
-&lt;center>
-&lt;img src="/docs/images/design/architectural-component.png" alt="image">
-&lt;/center>
+&lt;p>As a general-purpose graph database product, HugeGraph needs to possess basic graph database functionality. HugeGraph supports two types of graph computation: OLTP and OLAP. For OLTP, it implements the &lt;a href="https://tinkerpop.apache.org">Apache TinkerPop3&lt;/a> framework and supports the &lt;a href="https://tinkerpop.apache.org/gremlin.html">Gremlin&lt;/a> and &lt;a href="https://en.wikipedia.org/wiki/Cypher">Cypher&lt;/a> query languages. It comes with a complete application toolchain and provides a plugin-based backend storage driver framework.&lt;/p>
+&lt;p>Below is the overall architecture diagram of HugeGraph:&lt;/p>
+&lt;div style="text-align: center;">
+&lt;img src="/docs/images/design/architectural-revised.png" alt="image">
+&lt;/div>
+&lt;p>HugeGraph consists of three layers of functionality: the application layer, the graph engine layer, and the storage layer.&lt;/p>
 &lt;ul>
-&lt;li>HugeCore: The core module of HugeGraph, the interface of TinkerPop is mainly implemented in this module. The function of HugeCore includes two parts: OLTP and OLAP.&lt;/li>
-&lt;li>ApiServer: Provides RESTFul Api interface, and provides external interface services such as Graph Api, Schema Api, and Gremlin Api.&lt;/li>
-&lt;li>HugeGraph-Client: Java-based client driver. HugeGraph-Client is a Java version client driver, which can provide Python, Go, C++ and other multi-language support as needed.&lt;/li>
-&lt;li>HugeGraph-Loader: data import module. HugeGraph-Loader can scan and analyze existing data, automatically generate Graph Schema creation language, and quickly import data in batches.&lt;/li>
-&lt;li>HugeGraph-Studio: Web-based visual IDE environment. Record Gremlin queries in Notebook mode, and visualize the relationship between Graphs. HugeGraph-Studio is also a tool recommended by this system.&lt;/li>
-&lt;li>HugeGraph-Computer: HugeGraph-Computer is a distributed graph processing system (OLAP).&lt;/li>
+&lt;li>Application Layer:
+&lt;ul>
+&lt;li>&lt;a href="/docs/quickstart/hugegraph-hubble/">Hubble&lt;/a>: An all-in-one visual analytics platform that covers the entire process of data modeling, rapid data import, online and offline analysis of data, and unified management of graphs. It provides a guided workflow for operating graph applications.&lt;/li>
+&lt;li>&lt;a href="/docs/quickstart/hugegraph-loader/">Loader&lt;/a>: A data import component that can transform data from various sources into vertices and edges and bulk import them into the graph database.&lt;/li>
+&lt;li>&lt;a href="/docs/quickstart/hugegraph-tools/">Tools&lt;/a>: Command-line tools for deploying, managing, and backing up/restoring data in HugeGraph.&lt;/li>
+&lt;li>&lt;a href="/docs/quickstart/hugegraph-computer/">Computer&lt;/a>: A distributed graph processing system (OLAP) that implements &lt;a href="https://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel&lt;/a>. It can run on Kubernetes.&lt;/li>
+&lt;li>&lt;a href="/docs/quickstart/hugegraph-client/">Client&lt;/a>: HugeGraph client written in Java. Users can use the client to operate HugeGraph using Java code. Support for other languages such as Python, Go, and C++ may be provided in the future.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;a href="/docs/quickstart/hugegraph-server/">Graph Engine Layer&lt;/a>:
+&lt;ul>
+&lt;li>REST Server: Provides a RESTful API for querying graph/schema information, supports the &lt;a href="https://tinkerpop.apache.org/gremlin.html">Gremlin&lt;/a> and &lt;a href="https://en.wikipedia.org/wiki/Cypher">Cypher&lt;/a> query languages, and offers APIs for service monitoring and operations.&lt;/li>
+&lt;li>Graph Engine: Supports both OLTP and OLAP graph computation types, with OLTP implementing the &lt;a href="https://tinkerpop.apache.org">Apache TinkerPop3&lt;/a> framework.&lt;/li>
+&lt;li>Backend Interface: Implements the storage of graph data to the backend.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Storage Layer:
+&lt;ul>
+&lt;li>Storage Backend: Supports multiple built-in storage backends (RocksDB/MySQL/HBase/&amp;hellip;) and allows users to extend custom backends without modifying the existing source code.&lt;/li>
+&lt;/ul>
+&lt;/li>
 &lt;/ul></description></item><item><title>Docs: HugeGraph Design Concepts</title><link>/docs/guides/desgin-concept/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/docs/guides/desgin-concept/</guid><description>
 &lt;h3 id="1-property-graph">1. Property Graph&lt;/h3>
 &lt;p>There are two common graph data representation models, namely the RDF (Resource Description Framework) model and the Property Graph (Property Graph) model.
@@ -247,7 +259,7 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c4a000">xsi:schemaLocation=&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;#34;&lt;/span>&lt;span style="color:#204a87;font-weight:bold">&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;modelVersion&amp;gt;&lt;/span>4.0.0&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/modelVersion&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;groupId&amp;gt;&lt;/span>com.baidu.hugegraph&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/groupId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;groupId&amp;gt;&lt;/span>org.apache.hugegraph&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/groupId&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;artifactId&amp;gt;&lt;/span>hugegraph-plugin-demo&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/artifactId&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;version&amp;gt;&lt;/span>1.0.0&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/version&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;packaging&amp;gt;&lt;/span>jar&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/packaging&amp;gt;&lt;/span>
@@ -256,7 +268,7 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;dependencies&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;dependency&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;groupId&amp;gt;&lt;/span>com.baidu.hugegraph&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/groupId&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;groupId&amp;gt;&lt;/span>org.apache.hugegraph&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/groupId&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;artifactId&amp;gt;&lt;/span>hugegraph-core&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/artifactId&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;version&amp;gt;&lt;/span>${project.version}&lt;span style="color:#204a87;font-weight:bold">&amp;lt;/version&amp;gt;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;lt;/dependency&amp;gt;&lt;/span>
@@ -266,8 +278,8 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;h5 id="21-extending-a-custom-backend">2.1 Extending a custom backend&lt;/h5>
 &lt;h6 id="211--implement-the-interface-backendstoreprovider">2.1.1 Implement the interface BackendStoreProvider&lt;/h6>
 &lt;ul>
-&lt;li>Realizable interfaces: &lt;code>com.baidu.hugegraph.backend.store.BackendStoreProvider&lt;/code>&lt;/li>
-&lt;li>Or inherit an abstract class：&lt;code>com.baidu.hugegraph.backend.store.AbstractBackendStoreProvider&lt;/code>&lt;/li>
+&lt;li>Realizable interfaces: &lt;code>org.apache.hugegraph.backend.store.BackendStoreProvider&lt;/code>&lt;/li>
+&lt;li>Or inherit an abstract class:&lt;code>org.apache.hugegraph.backend.store.AbstractBackendStoreProvider&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;p>Take the RocksDB backend RocksDBStoreProvider as an example:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#204a87;font-weight:bold">class&lt;/span> &lt;span style="color:#000">RocksDBStoreProvider&lt;/span> &lt;span style="color:#204a87;font-weight:bold">extends&lt;/span> &lt;span style="color:#000">AbstractBackendStoreProvider&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>
@@ -337,7 +349,7 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#000">Id&lt;/span> &lt;span style="color:#000">nextId&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>&lt;span style="color:#000">HugeType&lt;/span> &lt;span style="color:#000">type&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h6 id="213-extending-custom-serializers">2.1.3 Extending custom serializers&lt;/h6>
-&lt;p>The serializer must inherit the abstract class: &lt;code>com.baidu.hugegraph.backend.serializer.AbstractSerializer&lt;/code>
+&lt;p>The serializer must inherit the abstract class: &lt;code>org.apache.hugegraph.backend.serializer.AbstractSerializer&lt;/code>
 ( &lt;code>implements GraphSerializer, SchemaSerializer&lt;/code>) The main interface is defined as follows:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#204a87;font-weight:bold">interface&lt;/span> &lt;span style="color:#000">GraphSerializer&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#000">BackendEntry&lt;/span> &lt;span style="color:#000">writeVertex&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>&lt;span style="color:#000">HugeVertex&lt;/span> &lt;span style="color:#000">vertex&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">);&lt;/span>
@@ -365,7 +377,7 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h6 id="214-extend-custom-configuration-items">2.1.4 Extend custom configuration items&lt;/h6>
 &lt;p>When adding a custom backend, it may be necessary to add new configuration items. The implementation process mainly includes:&lt;/p>
 &lt;ul>
-&lt;li>Add a configuration item container class and implement the interface &lt;code>com.baidu.hugegraph.config.OptionHolder&lt;/code>&lt;/li>
+&lt;li>Add a configuration item container class and implement the interface &lt;code>org.apache.hugegraph.config.OptionHolder&lt;/code>&lt;/li>
 &lt;li>Provide a singleton method &lt;code>public static OptionHolder instance()&lt;/code>, and call the method when the object is initialized &lt;code>OptionHolder.registerOptions()&lt;/code>&lt;/li>
 &lt;li>Add configuration item declaration, single-value configuration item type is &lt;code>ConfigOption&lt;/code>, multi-value configuration item type is &lt;code>ConfigListOption&lt;/code>&lt;/li>
 &lt;/ul>
@@ -416,14 +428,14 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ce5c00;font-weight:bold">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h5 id="22-extend-custom-tokenizer">2.2 Extend custom tokenizer&lt;/h5>
-&lt;p>The tokenizer needs to implement the interface &lt;code>com.baidu.hugegraph.analyzer.Analyzer&lt;/code>, take implementing a SpaceAnalyzer space tokenizer as an example.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">package&lt;/span> &lt;span style="color:#000">com.baidu.hugegraph.plugin&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
+&lt;p>The tokenizer needs to implement the interface &lt;code>org.apache.hugegraph.analyzer.Analyzer&lt;/code>, take implementing a SpaceAnalyzer space tokenizer as an example.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">package&lt;/span> &lt;span style="color:#000">org.apache.hugegraph.plugin&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000">java.util.Arrays&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000">java.util.HashSet&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000">java.util.Set&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000">com.baidu.hugegraph.analyzer.Analyzer&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000">org.apache.hugegraph.analyzer.Analyzer&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#204a87;font-weight:bold">class&lt;/span> &lt;span style="color:#000">SpaceAnalyzer&lt;/span> &lt;span style="color:#204a87;font-weight:bold">implements&lt;/span> &lt;span style="color:#000">Analyzer&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
@@ -434,7 +446,7 @@ configuration items to the plug-in custom value, and restarts to take effect&lt;
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="3-implement-the-plug-in-interface-and-register-it">3. Implement the plug-in interface and register it&lt;/h4>
 &lt;p>The plug-in registration entry is &lt;code>HugeGraphPlugin.register()&lt;/code>, the custom plug-in must implement this interface method, and register the extension
-items defined above inside it. The interface &lt;code>com.baidu.hugegraph.plugin.HugeGraphPlugin&lt;/code> is defined as follows:&lt;/p>
+items defined above inside it. The interface &lt;code>org.apache.hugegraph.plugin.HugeGraphPlugin&lt;/code> is defined as follows:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#204a87;font-weight:bold">interface&lt;/span> &lt;span style="color:#000">HugeGraphPlugin&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#000">String&lt;/span> &lt;span style="color:#000">name&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">();&lt;/span>
@@ -447,13 +459,13 @@ items defined above inside it. The interface &lt;code>com.baidu.hugegraph.plugin
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ce5c00;font-weight:bold">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And HugeGraphPlugin provides 4 static methods for registering extensions:&lt;/p>
 &lt;ul>
-&lt;li>registerOptions(String name, String classPath)：register configuration items&lt;/li>
-&lt;li>registerBackend(String name, String classPath)：register backend (BackendStoreProvider)&lt;/li>
-&lt;li>registerSerializer(String name, String classPath)：register serializer&lt;/li>
-&lt;li>registerAnalyzer(String name, String classPath)：register tokenizer&lt;/li>
+&lt;li>registerOptions(String name, String classPath): register configuration items&lt;/li>
+&lt;li>registerBackend(String name, String classPath): register backend (BackendStoreProvider)&lt;/li>
+&lt;li>registerSerializer(String name, String classPath): register serializer&lt;/li>
+&lt;li>registerAnalyzer(String name, String classPath): register tokenizer&lt;/li>
 &lt;/ul>
 &lt;p>The following is an example of registering the SpaceAnalyzer tokenizer:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">package&lt;/span> &lt;span style="color:#000">com.baidu.hugegraph.plugin&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">package&lt;/span> &lt;span style="color:#000">org.apache.hugegraph.plugin&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">public&lt;/span> &lt;span style="color:#204a87;font-weight:bold">class&lt;/span> &lt;span style="color:#000">DemoPlugin&lt;/span> &lt;span style="color:#204a87;font-weight:bold">implements&lt;/span> &lt;span style="color:#000">HugeGraphPlugin&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
@@ -470,8 +482,8 @@ items defined above inside it. The interface &lt;code>com.baidu.hugegraph.plugin
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="4-configure-spi-entry">4. Configure SPI entry&lt;/h4>
 &lt;ol>
 &lt;li>Make sure the services directory exists: hugegraph-plugin-demo/resources/META-INF/services&lt;/li>
-&lt;li>Create a text file in the services directory: com.baidu.hugegraph.plugin.HugeGraphPlugin&lt;/li>
-&lt;li>The content of the file is as follows: com.baidu.hugegraph.plugin.DemoPlugin&lt;/li>
+&lt;li>Create a text file in the services directory: org.apache.hugegraph.plugin.HugeGraphPlugin&lt;/li>
+&lt;li>The content of the file is as follows: org.apache.hugegraph.plugin.DemoPlugin&lt;/li>
 &lt;/ol>
 &lt;h4 id="5-make-jar-package">5. Make Jar package&lt;/h4>
 &lt;p>Through maven packaging, execute the command in the project directory mvn package, and a Jar package file will be generated in the
